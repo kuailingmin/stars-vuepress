@@ -1,3 +1,16 @@
 import comp from "/Users/kuailingmin/Desktop/klm/stars-vuepress/docs/.vuepress/.temp/pages/pinia/diffVuex.html.vue"
-const data = JSON.parse("{\"path\":\"/pinia/diffVuex.html\",\"title\":\"Pinia 与 Vuex 的比较\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1722322323000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"444e0c9033fc5359522e4a4695075e0e365d6291\",\"time\":1722322323000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"新增内容\"}]},\"filePathRelative\":\"pinia/diffVuex.md\",\"excerpt\":\"\\n<p>Pinia 试图尽可能地接近 Vuex 的理念。它旨在测试 Vuex 下一次迭代的提案，并且取得了成功，因为我们目前有一个针对 Vuex 5 的开放 RFC，其 API 与 Pinia 使用的 API 非常相似。请注意，我 (Eduardo)，Pinia 的作者，是 Vue.js 核心团队的一员，并积极参与了 Router 和 Vuex 等 API 的设计。我个人对这个项目的意图是重新设计使用全球Stores的体验，同时保持 Vue 的平易近人的理念。我保持 Pinia 的 API 与 Vuex 一样接近，因为它不断向前发展，以使人们更容易迁移到 Vuex，甚至在未来融合两个项目（在 Vuex 下）。</p>\"}")
+const data = JSON.parse("{\"path\":\"/pinia/diffVuex.html\",\"title\":\"Pinia 与 Vuex 的比较\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1765249106000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"efd3b6522abcfccbdafa315316a05833baf4ffb6\",\"time\":1765249106000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"文档架构\"}]},\"filePathRelative\":\"pinia/diffVuex.md\",\"excerpt\":\"\\n<p>Pinia 试图尽可能地接近 Vuex 的理念。它旨在测试 Vuex 下一次迭代的提案，并且取得了成功，因为我们目前有一个针对 Vuex 5 的开放 RFC，其 API 与 Pinia 使用的 API 非常相似。请注意，我 (Eduardo)，Pinia 的作者，是 Vue.js 核心团队的一员，并积极参与了 Router 和 Vuex 等 API 的设计。我个人对这个项目的意图是重新设计使用全球Stores的体验，同时保持 Vue 的平易近人的理念。我保持 Pinia 的 API 与 Vuex 一样接近，因为它不断向前发展，以使人们更容易迁移到 Vuex，甚至在未来融合两个项目（在 Vuex 下）。</p>\"}")
 export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

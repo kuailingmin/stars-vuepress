@@ -150,6 +150,7 @@ export default defineUserConfig({
          'ssg.md',
          'ssr.md',
          'symbol.md',
+         'mediaDevices.md'
         ]
       },
       { 

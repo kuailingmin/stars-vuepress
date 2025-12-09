@@ -1,3 +1,16 @@
 import comp from "/Users/kuailingmin/Desktop/klm/stars-vuepress/docs/.vuepress/.temp/pages/hzero/workplace.html.vue"
-const data = JSON.parse("{\"path\":\"/hzero/workplace.html\",\"title\":\"工作台\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1722322323000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"444e0c9033fc5359522e4a4695075e0e365d6291\",\"time\":1722322323000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"新增内容\"}]},\"filePathRelative\":\"hzero/workplace.md\",\"excerpt\":\"\\n<div class=\\\"hint-container tip\\\">\\n<p class=\\\"hint-container-title\\\">说明</p>\\n<p>这里首先要吐槽一下，汉德的前端技术文档写得让人理解很费劲，其技术文档写的很片面，具体流程几乎没有讲清楚。我们在开发过程中，不停的去找答案！一个字“坑”，接下来记录工作台开发的流程。</p>\\n</div>\\n<h3>第一步：配置新的工作台卡片</h3>\\n<p>首先用超级管理员账户登录，找到菜单“卡片管理”，点击进入\\n</p>\\n<p>然后“新建”一个卡片\\n</p>\\n<p></p>\\n<p>按照要求把下面的内容填好，并保存成功即可，这里抽取重要字段说明一下：</p>\"}")
+const data = JSON.parse("{\"path\":\"/hzero/workplace.html\",\"title\":\"工作台\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1765249106000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"efd3b6522abcfccbdafa315316a05833baf4ffb6\",\"time\":1765249106000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"文档架构\"}]},\"filePathRelative\":\"hzero/workplace.md\",\"excerpt\":\"\\n<div class=\\\"hint-container tip\\\">\\n<p class=\\\"hint-container-title\\\">说明</p>\\n<p>这里首先要吐槽一下，汉德的前端技术文档写得让人理解很费劲，其技术文档写的很片面，具体流程几乎没有讲清楚。我们在开发过程中，不停的去找答案！一个字“坑”，接下来记录工作台开发的流程。</p>\\n</div>\\n<h3>第一步：配置新的工作台卡片</h3>\\n<p>首先用超级管理员账户登录，找到菜单“卡片管理”，点击进入\\n</p>\\n<p>然后“新建”一个卡片\\n</p>\\n<p></p>\\n<p>按照要求把下面的内容填好，并保存成功即可，这里抽取重要字段说明一下：</p>\"}")
 export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

@@ -1,3 +1,16 @@
 import comp from "/Users/kuailingmin/Desktop/klm/stars-vuepress/docs/.vuepress/.temp/pages/vue3/timeSection.html.vue"
-const data = JSON.parse("{\"path\":\"/vue3/timeSection.html\",\"title\":\"时间切片\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1722322323000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"444e0c9033fc5359522e4a4695075e0e365d6291\",\"time\":1722322323000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"新增内容\"}]},\"filePathRelative\":\"vue3/timeSection.md\",\"excerpt\":\"\\n<p>根据尤雨溪的推文，此功能不会包含在 Vue 3 中。</p>\\n<p>Vue 3 另一个令人兴奋的性能功能是对时间切片的实验性支持，但是它很少被提及。</p>\\n<p>用一个比喻来解释什么是时间切片。想象有一条买冰淇淋的队伍，它非常的长。因为那是镇上最好的冰淇淋，人们一个接一个的去买。由于某种原因，没有关于可用口味的信息。要得到这个信息，你需要询问直接出售冰淇淋的女士。</p>\\n<p>在这种情况下，我们可能最终会得到 2 条记录——其中一条给想要购买冰淇淋的人（说服他们耐心等待），另一条给希望在选择之前了解更多口味信息的人，我们应该尽快获得这个信息。不幸的是，只有一位女士在卖冰淇淋，她在为“主”线上的所有客户提供服务之前不会回答任何问题。</p>\"}")
+const data = JSON.parse("{\"path\":\"/vue3/timeSection.html\",\"title\":\"时间切片\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1765249106000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"efd3b6522abcfccbdafa315316a05833baf4ffb6\",\"time\":1765249106000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"文档架构\"}]},\"filePathRelative\":\"vue3/timeSection.md\",\"excerpt\":\"\\n<p>根据尤雨溪的推文，此功能不会包含在 Vue 3 中。</p>\\n<p>Vue 3 另一个令人兴奋的性能功能是对时间切片的实验性支持，但是它很少被提及。</p>\\n<p>用一个比喻来解释什么是时间切片。想象有一条买冰淇淋的队伍，它非常的长。因为那是镇上最好的冰淇淋，人们一个接一个的去买。由于某种原因，没有关于可用口味的信息。要得到这个信息，你需要询问直接出售冰淇淋的女士。</p>\\n<p>在这种情况下，我们可能最终会得到 2 条记录——其中一条给想要购买冰淇淋的人（说服他们耐心等待），另一条给希望在选择之前了解更多口味信息的人，我们应该尽快获得这个信息。不幸的是，只有一位女士在卖冰淇淋，她在为“主”线上的所有客户提供服务之前不会回答任何问题。</p>\"}")
 export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

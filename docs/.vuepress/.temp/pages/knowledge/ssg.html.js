@@ -1,3 +1,16 @@
 import comp from "/Users/kuailingmin/Desktop/klm/stars-vuepress/docs/.vuepress/.temp/pages/knowledge/ssg.html.vue"
-const data = JSON.parse("{\"path\":\"/knowledge/ssg.html\",\"title\":\"SSG\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1722322323000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"444e0c9033fc5359522e4a4695075e0e365d6291\",\"time\":1722322323000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"新增内容\"}]},\"filePathRelative\":\"knowledge/ssg.md\",\"excerpt\":\"\\n<p>我们重新对 SSR 进行审视，服务端渲染出的页面，逻辑上讲可以分成下面两大块：</p>\\n<p>1、变化不频繁，甚至不会变化的内容：例如文章、排行榜、商品信息、推荐列表等等，这些数据非常适合缓存；</p>\\n<p>2、变化比较频繁，或者千人千面的内容：例如用户头像、Timeline、登录状态、实时评论等。</p>\\n<p>例如，在一篇文章的页面中，文章的主题内容是偏向于静态的，很少有改动，那么每次用户的页面请求，都通过服务端来渲染就变得非常不值得，因为每次服务端渲染出来大部分内容都是一样的！</p>\\n<p>我们完全可以将文章的页面渲染为静态页面，至于页面内那些动态的内容（用户头像、评论框等），就通过 HTTP API 的形式进行浏览器端渲染（CSR）：</p>\"}")
+const data = JSON.parse("{\"path\":\"/knowledge/ssg.html\",\"title\":\"SSG\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1765249106000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"efd3b6522abcfccbdafa315316a05833baf4ffb6\",\"time\":1765249106000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"文档架构\"}]},\"filePathRelative\":\"knowledge/ssg.md\",\"excerpt\":\"\\n<p>我们重新对 SSR 进行审视，服务端渲染出的页面，逻辑上讲可以分成下面两大块：</p>\\n<p>1、变化不频繁，甚至不会变化的内容：例如文章、排行榜、商品信息、推荐列表等等，这些数据非常适合缓存；</p>\\n<p>2、变化比较频繁，或者千人千面的内容：例如用户头像、Timeline、登录状态、实时评论等。</p>\\n<p>例如，在一篇文章的页面中，文章的主题内容是偏向于静态的，很少有改动，那么每次用户的页面请求，都通过服务端来渲染就变得非常不值得，因为每次服务端渲染出来大部分内容都是一样的！</p>\\n<p>我们完全可以将文章的页面渲染为静态页面，至于页面内那些动态的内容（用户头像、评论框等），就通过 HTTP API 的形式进行浏览器端渲染（CSR）：</p>\"}")
 export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

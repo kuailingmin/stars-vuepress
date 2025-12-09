@@ -1,3 +1,16 @@
 import comp from "/Users/kuailingmin/Desktop/klm/stars-vuepress/docs/.vuepress/.temp/pages/vue3/css.html.vue"
-const data = JSON.parse("{\"path\":\"/vue3/css.html\",\"title\":\"style (黑科技)\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1722322323000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"444e0c9033fc5359522e4a4695075e0e365d6291\",\"time\":1722322323000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"新增内容\"}]},\"filePathRelative\":\"vue3/css.md\",\"excerpt\":\"\\n<div class=\\\"hint-container tip\\\">\\n<p class=\\\"hint-container-title\\\">说明</p>\\n<p>在前一阵子VueConf2021大会上，尤雨溪提到一个有趣的东西，那就是在Vue3.x版本加入了一个机制，通过js可以逻辑控制css style的变化。而且尤雨溪重点提到此功能利用浏览器原生的API去做的，性能消耗很小很小，几乎为零！在 SFC Style Variables 提案中介绍到， Vue SFC 样式提供了简单的 CSS 组合和封装，现在大多数现代浏览器都支持原生 CSS 变量，我们可以利用它轻松连接组件的状态和样式。那我们就看看它是如何实现的？</p>\\n</div>\"}")
+const data = JSON.parse("{\"path\":\"/vue3/css.html\",\"title\":\"style (黑科技)\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"git\":{\"updatedTime\":1765249106000,\"contributors\":[{\"name\":\"前端艺术者\",\"username\":\"\",\"email\":\"kuailingmin@126.com\",\"commits\":1}],\"changelog\":[{\"hash\":\"efd3b6522abcfccbdafa315316a05833baf4ffb6\",\"time\":1765249106000,\"email\":\"kuailingmin@126.com\",\"author\":\"前端艺术者\",\"message\":\"文档架构\"}]},\"filePathRelative\":\"vue3/css.md\",\"excerpt\":\"\\n<div class=\\\"hint-container tip\\\">\\n<p class=\\\"hint-container-title\\\">说明</p>\\n<p>在前一阵子VueConf2021大会上，尤雨溪提到一个有趣的东西，那就是在Vue3.x版本加入了一个机制，通过js可以逻辑控制css style的变化。而且尤雨溪重点提到此功能利用浏览器原生的API去做的，性能消耗很小很小，几乎为零！在 SFC Style Variables 提案中介绍到， Vue SFC 样式提供了简单的 CSS 组合和封装，现在大多数现代浏览器都支持原生 CSS 变量，我们可以利用它轻松连接组件的状态和样式。那我们就看看它是如何实现的？</p>\\n</div>\"}")
 export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}
