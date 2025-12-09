@@ -1,0 +1,205 @@
+<template><div><h1 id="如何中断已发出去的请求" tabindex="-1"><a class="header-anchor" href="#如何中断已发出去的请求"><span>如何中断已发出去的请求</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>虽然使用场景很少，但是还是要记录一下知识点，万一哪天需要呢？！</p>
+</div>
+<h3 id="abortcontroller" tabindex="-1"><a class="header-anchor" href="#abortcontroller"><span>AbortController</span></a></h3>
+<p>一个控制器对象，可以根据需要终止一个或多个Web请求</p>
+<ul>
+<li>AbortController()：AbortController()构造函数创建一个新的 AbortController 对象实例</li>
+<li>signal：signal 属性返回一个 AbortSignal 对象实例，它可以用来 with/about 一个Web(网络)请求</li>
+<li>abort()：终止一个尚未完成的Web(网络)请求，它能够终止 fetch 请求，任何响应Body的消费者和流</li>
+</ul>
+<h3 id="fetch-中断请求" tabindex="-1"><a class="header-anchor" href="#fetch-中断请求"><span>Fetch 中断请求</span></a></h3>
+<p>Fetch 是 Web 提供的一个用于获取资源的接口，如果要终止 fetch 请求，则可以使用 Web 提供的 AbortController 接口。</p>
+<p>首先我们使用 AbortController() 构造函数创建一个控制器，然后使用 AbortController.signal 属性获取其关联 AbortSignal 对象的引用。</p>
+<p>当一个 fetch request 初始化时，我们把 AbortSignal 作为一个选项传递到请求对象 (如下：{signal}) 。这将信号和控制器与获取请求相关联，然后允许我们通过调用 AbortController.abort() 中止请求。</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">const</span> controller <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AbortController</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">let</span> signal <span class="token operator">=</span> controller<span class="token punctuation">.</span>signal<span class="token punctuation">;</span></span>
+<span class="line"> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'signal 的初始状态: '</span><span class="token punctuation">,</span> signal<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token keyword">const</span> downloadBtn <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.download'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">const</span> abortBtn <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'.abort'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">downloadBtn<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'click'</span><span class="token punctuation">,</span> fetchVideo<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">abortBtn<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'click'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">  controller<span class="token punctuation">.</span><span class="token function">abort</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'signal 的中止状态: '</span><span class="token punctuation">,</span> signal<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token keyword">function</span> <span class="token function">fetchVideo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token comment">//...</span></span>
+<span class="line">  <span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token punctuation">{</span>signal<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">response</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token comment">//...</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    reports<span class="token punctuation">.</span>textContent <span class="token operator">=</span> <span class="token string">'Download error: '</span> <span class="token operator">+</span> e<span class="token punctuation">.</span>message<span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>当我们中止请求后，网络请求变成了如下所示的情况：
+<img src="@source/images/i1.png" alt=""></p>
+<p>我们再来看看 AbortSignal 中止前和中止后的状态：
+<img src="@source/images/i2.png" alt=""></p>
+<p>AbortControllter 有兼容性问题，如下：</p>
+<p><img src="@source/images/i3.png" alt=""></p>
+<h3 id="axios-中断请求" tabindex="-1"><a class="header-anchor" href="#axios-中断请求"><span>axios 中断请求</span></a></h3>
+<p>axions 中断请求有两种方式：</p>
+<h4 id="第一种-使用-canceltoken-souce-工厂方法创建一个-cancel-token-代码如下" tabindex="-1"><a class="header-anchor" href="#第一种-使用-canceltoken-souce-工厂方法创建一个-cancel-token-代码如下"><span>第一种： 使用 CancelToken.souce 工厂方法创建一个 cancel token，代码如下</span></a></h4>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">const</span> CancelToken <span class="token operator">=</span> axios<span class="token punctuation">.</span>CancelToken<span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">const</span> source <span class="token operator">=</span> CancelToken<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'https://mdn.github.io/dom-examples/abort-api/sintel.mp4'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">cancelToken</span><span class="token operator">:</span> source<span class="token punctuation">.</span>token</span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">thrown</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token comment">// 判断请求是否已中止</span></span>
+<span class="line">  <span class="token keyword">if</span> <span class="token punctuation">(</span>axios<span class="token punctuation">.</span><span class="token function">isCancel</span><span class="token punctuation">(</span>thrown<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token comment">// 参数 thrown 是自定义的信息</span></span>
+<span class="line">    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Request canceled'</span><span class="token punctuation">,</span> thrown<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token comment">// 处理错误</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 取消请求（message 参数是可选的）</span></span>
+<span class="line">source<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token string">'Operation canceled by the user.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这里注意一下：初始时和中止后的 souce 状态：
+<img src="@source/images/i4.png" alt=""></p>
+<p>可以看到，初始时和中止后的 source 状态并没还有发生改变。那么我们是如何判断请求的中止状态呢？axios 为我们提供了一个 isCancel() 方法，用于判断请求的中止状态。isCancel() 方法的参数，就是我们在中止请求时自定义的信息。</p>
+<p><img src="@source/images/i5.png" alt=""></p>
+<h4 id="第二种-通过传递一个-executor-函数到-canceltoken-的构造函数来创建一个-cancel-token" tabindex="-1"><a class="header-anchor" href="#第二种-通过传递一个-executor-函数到-canceltoken-的构造函数来创建一个-cancel-token"><span>第二种： 通过传递一个 executor 函数到 CancelToken 的构造函数来创建一个 cancel token：</span></a></h4>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">const</span> CancelToken <span class="token operator">=</span> axios<span class="token punctuation">.</span>CancelToken<span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">let</span> cancel<span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/user/12345'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">cancelToken</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">CancelToken</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">executor</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token comment">// executor 函数接收一个 cancel 函数作为参数</span></span>
+<span class="line">    cancel <span class="token operator">=</span> c<span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 取消请求</span></span>
+<span class="line"><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token string">'Operation canceled by the user.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">const</span> CancelToken <span class="token operator">=</span> axios<span class="token punctuation">.</span>CancelToken<span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">let</span> cancel<span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/user/12345'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">cancelToken</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">CancelToken</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">executor</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token comment">// executor 函数接收一个 cancel 函数作为参数</span></span>
+<span class="line">    cancel <span class="token operator">=</span> c<span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 取消请求</span></span>
+<span class="line"><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token string">'Operation canceled by the user.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="umi-request-中断请求" tabindex="-1"><a class="header-anchor" href="#umi-request-中断请求"><span>umi-request 中断请求</span></a></h3>
+<p>umi-request 基于 fetch 封装, 兼具 fetch 与 axios 的特点, 中止请求与 fetch 和 axios 一致不再过多赘述</p>
+<p>需要注意的是 AbortController 在低版本浏览器polyfill有问题，umi-request 在某些版本中并未提供 AbortController 的方式中止请求。</p>
+<h3 id="umi-项目中使用-canceltoken-中止请求" tabindex="-1"><a class="header-anchor" href="#umi-项目中使用-canceltoken-中止请求"><span>umi 项目中使用 CancelToken 中止请求</span></a></h3>
+<p>umi 项目中默认的请求库是umi-request，因此我们可以使用umi-request提供的方法来中止请求。另外，在umi项目中可以搭配使用了dva，因此下面简单介绍下在dva中使用CancelToken中止请求的流程。</p>
+<p>1、在 services 目录下的文件中编写请求函数和取消请求的函数</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">import</span> request <span class="token keyword">from</span> <span class="token string">'@/utils/request'</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">const</span> CancelToken <span class="token operator">=</span> request<span class="token punctuation">.</span>CancelToken<span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">let</span> <span class="token literal-property property">cancel</span><span class="token operator">:</span> any<span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 合同文件上传 OSS</span></span>
+<span class="line"><span class="token keyword">export</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">uploadContractFileToOSS</span><span class="token punctuation">(</span><span class="token parameter"><span class="token literal-property property">postBody</span><span class="token operator">:</span> Blob</span><span class="token punctuation">)</span><span class="token operator">:</span> Promise<span class="token operator">&lt;</span>any<span class="token operator">></span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">return</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/fms/ossUpload/financial_sys/contractFile</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token string">"POST"</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token literal-property property">data</span><span class="token operator">:</span> postBody<span class="token punctuation">,</span></span>
+<span class="line">    <span class="token literal-property property">requestType</span><span class="token operator">:</span> <span class="token string">'form'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token comment">// 传递一个 executor 函数到 CancelToken 的构造函数来创建一个 cancel token</span></span>
+<span class="line">    <span class="token literal-property property">cancelToken</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">CancelToken</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">      cancel <span class="token operator">=</span> c</span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 取消合同文件上传</span></span>
+<span class="line"><span class="token keyword">export</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">cancelUploadFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">return</span> cancel <span class="token operator">&amp;&amp;</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="2">
+<li>在 models 中编写 Effect：</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token operator">*</span><span class="token function">uploadContractFileToOSS</span><span class="token punctuation">(</span><span class="token punctuation">{</span> payload <span class="token punctuation">}</span><span class="token operator">:</span> AnyAction<span class="token punctuation">,</span> <span class="token punctuation">{</span> call<span class="token punctuation">,</span> put <span class="token punctuation">}</span><span class="token operator">:</span> EffectsCommandMap<span class="token punctuation">)</span><span class="token operator">:</span> any <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">call</span><span class="token punctuation">(</span>uploadContractFileToOSS<span class="token punctuation">,</span> payload<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token keyword">yield</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">    <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'save'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token literal-property property">payload</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">uploadOSSResult</span><span class="token operator">:</span> response<span class="token operator">?.</span>data<span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token keyword">return</span> response<span class="token operator">?.</span>data</span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">,</span></span>
+<span class="line"></span>
+<span class="line"><span class="token operator">*</span><span class="token function">cancelUploadFile</span><span class="token punctuation">(</span>_<span class="token operator">:</span> AnyAction<span class="token punctuation">,</span> <span class="token punctuation">{</span> call <span class="token punctuation">}</span><span class="token operator">:</span> EffectsCommandMap<span class="token punctuation">)</span><span class="token operator">:</span> any <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">call</span><span class="token punctuation">(</span>cancelUploadFile<span class="token punctuation">)</span></span>
+<span class="line">  <span class="token keyword">return</span> response</span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">,</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="3">
+<li>在页面中通过dispatch函数触发相应的action：</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token comment">// 发起请求</span></span>
+<span class="line"><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'contract/fetchContractFiles'</span><span class="token punctuation">,</span></span>
+<span class="line">  <span class="token literal-property property">payload</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token literal-property property">contractId</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"></span>
+<span class="line"><span class="token comment">// 取消请求</span></span>
+<span class="line"><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"contract/cancelUploadFile"</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">  </span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="4">
+<li>在 utils/request.js 中统一处理中止请求的拦截：</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">const</span> errorHandler <span class="token operator">=</span> <span class="token punctuation">(</span>error<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">response</span><span class="token operator">:</span> Response <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token parameter">Response</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">const</span> <span class="token punctuation">{</span> response <span class="token punctuation">}</span> <span class="token operator">=</span> error<span class="token punctuation">;</span></span>
+<span class="line">  notification<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span>
+<span class="line"></span>
+<span class="line">  <span class="token keyword">if</span> <span class="token punctuation">(</span>response <span class="token operator">&amp;&amp;</span> response<span class="token punctuation">.</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token keyword">const</span> errorText <span class="token operator">=</span> codeMessage<span class="token punctuation">[</span>response<span class="token punctuation">.</span>status<span class="token punctuation">]</span> <span class="token operator">||</span> response<span class="token punctuation">.</span>statusText<span class="token punctuation">;</span></span>
+<span class="line">    <span class="token keyword">const</span> <span class="token punctuation">{</span> status<span class="token punctuation">,</span> url <span class="token punctuation">}</span> <span class="token operator">=</span> response<span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">    notification<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">请求错误 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>status<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>url<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span></span>
+<span class="line">      <span class="token literal-property property">description</span><span class="token operator">:</span> errorText<span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>error<span class="token operator">?.</span><span class="token punctuation">[</span><span class="token string">'type'</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">'TypeError'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    notification<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'您的网络发生异常，无法连接服务器'</span><span class="token punctuation">,</span></span>
+<span class="line">      <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">'网络异常'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>error<span class="token operator">?.</span><span class="token punctuation">[</span><span class="token string">'request'</span><span class="token punctuation">]</span><span class="token operator">?.</span><span class="token punctuation">[</span><span class="token string">'options'</span><span class="token punctuation">]</span><span class="token operator">?.</span><span class="token punctuation">[</span><span class="token string">'cancelToken'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    notification<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'当前请求已被取消'</span><span class="token punctuation">,</span></span>
+<span class="line">      <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">'取消请求'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>response<span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    notification<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'您的网络发生异常，无法连接服务器'</span><span class="token punctuation">,</span></span>
+<span class="line">      <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">'网络异常'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span></span>
+<span class="line">    notification<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'请联系网站开发人员处理'</span><span class="token punctuation">,</span></span>
+<span class="line">      <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">'未知错误'</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line">  <span class="token keyword">return</span> response<span class="token punctuation">;</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">;</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></div></template>
+
+

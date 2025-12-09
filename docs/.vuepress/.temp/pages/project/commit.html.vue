@@ -1,0 +1,63 @@
+<template><div><h1 id="代码提交规范" tabindex="-1"><a class="header-anchor" href="#代码提交规范"><span>代码提交规范</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>以前团队人员提交代码时候没有好的commit描述规范，而现在我们有一个好的工具可以帮助我们规范提交代码。</p>
+</div>
+<h3 id="安装husky" tabindex="-1"><a class="header-anchor" href="#安装husky"><span>安装husky</span></a></h3>
+<p>husky 是一个 Git 钩子（Git hooks）工具，它可以让你在 Git 事件发生时执行脚本，进行代码格式化、测试等操作。</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  pnpm add husky <span class="token operator">-</span><span class="token constant">D</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><h3 id="配置husky" tabindex="-1"><a class="header-anchor" href="#配置husky"><span>配置husky</span></a></h3>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> npx husky init</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p>项目工程会自动生成一个.husky文件夹，里面有一个pre-commit文件。</p>
+<p>pre-commit文件内容如下：</p>
+<div class="language-bash line-numbers-mode" data-highlighter="prismjs" data-ext="sh"><pre v-pre><code class="language-bash"><span class="line">  <span class="token comment">#!/bin/sh</span></span>
+<span class="line">  <span class="token builtin class-name">.</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"<span class="token variable">$0</span>"</span><span class="token variable">)</span></span>/_/husky.sh"</span></span>
+<span class="line"></span>
+<span class="line">  <span class="token function">pnpm</span> lint // 执行lint命令</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>packa.json文件husky配置如下：</p>
+<div class="language-json line-numbers-mode" data-highlighter="prismjs" data-ext="json"><pre v-pre><code class="language-json"><span class="line"><span class="token property">"husky"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token property">"hooks"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token property">"commit-msg"</span><span class="token operator">:</span> <span class="token string">"commitlint -E HUSKY_GIT_PARAMS"</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>做完上面的配置后，每次提交代码的时候都会自定义的执行命令做操作了。</p>
+<h3 id="安装commitizen" tabindex="-1"><a class="header-anchor" href="#安装commitizen"><span>安装Commitizen</span></a></h3>
+<p>下面我们安装提交代码的规范工具Commitizen，用于以一致的方式编写规范的提交消息，需要安装Commitizen 和一个适配器cz-conventional-changelog</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> pnpm install commitizen cz<span class="token operator">-</span>conventional<span class="token operator">-</span>changelog <span class="token operator">-</span><span class="token constant">D</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p>在package.json文件添加配置如下：</p>
+<div class="language-json line-numbers-mode" data-highlighter="prismjs" data-ext="json"><pre v-pre><code class="language-json"><span class="line"><span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token property">"commit"</span><span class="token operator">:</span> <span class="token string">"git-cz"</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">,</span></span>
+<span class="line"> <span class="token property">"config"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token property">"commitizen"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">      <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"cz-conventional-changelog"</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>一切准备工作已经完成，现在执行命令</p>
+<h5 id="第一步" tabindex="-1"><a class="header-anchor" href="#第一步"><span>第一步：</span></a></h5>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  git add <span class="token punctuation">.</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><h5 id="第二步" tabindex="-1"><a class="header-anchor" href="#第二步"><span>第二步：</span></a></h5>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   pnpm commit</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p><img src="@source/images/commit.png" alt=""></p>
+<p>首先选择提交信息的类型，然后经过以下5步的操作</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token number">1.</span> <span class="token operator">?</span> What is the scope <span class="token keyword">of</span> <span class="token keyword">this</span> change <span class="token comment">// 此更改的范围是什么</span></span>
+<span class="line"><span class="token number">2.</span> <span class="token operator">?</span> Write a short<span class="token punctuation">,</span> imperative tense description <span class="token keyword">of</span> the change<span class="token comment">//【必填】 简短的描述这个变化</span></span>
+<span class="line"><span class="token number">3.</span> <span class="token operator">?</span> Provide a longer description <span class="token keyword">of</span> the change<span class="token comment">//提供变更的详细说明：</span></span>
+<span class="line"><span class="token number">4.</span> <span class="token operator">?</span> Are there any breaking changes<span class="token operator">?</span> <span class="token comment">//有什么突破性的变化吗？【y/n】</span></span>
+<span class="line"><span class="token number">5.</span> <span class="token operator">?</span> Does <span class="token keyword">this</span> change affect any open issues<span class="token operator">?</span> <span class="token punctuation">(</span>y<span class="token operator">/</span><span class="token constant">N</span><span class="token punctuation">)</span> <span class="token comment">//此更改是否会影响任何悬而未决的问题（是/否）</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这里操作完成就相当于执行了git commit -m &quot;提交信息&quot;</p>
+<h5 id="最后一步" tabindex="-1"><a class="header-anchor" href="#最后一步"><span>最后一步：</span></a></h5>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   git push</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div></div></template>
+
+

@@ -1,0 +1,92 @@
+<template><div><h1 id="设置状态" tabindex="-1"><a class="header-anchor" href="#设置状态"><span>设置状态</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>setState是我们在React.js开发过程中很关键，重要的，它是改变视图必经之路，在它的运行过程中有几个点需要知道的</p>
+</div>
+<h3 id="异步-or-同步" tabindex="-1"><a class="header-anchor" href="#异步-or-同步"><span>异步 or 同步</span></a></h3>
+<p>那要看我们怎么去操作了，如果正常的情况下，看出的结果是异步，如果脱离react.js中的事件流和生命周期，setState则是同步，归根结底还是因为react框架本身的性能机制所导致的</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   <span class="token comment">// 数据定义</span></span>
+<span class="line">   state <span class="token operator">=</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token literal-property property">counts</span><span class="token operator">:</span><span class="token number">1</span></span>
+<span class="line">   <span class="token punctuation">}</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">   <span class="token comment">// 事件中的处理</span></span>
+<span class="line">   <span class="token function-variable function">handleClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token keyword">const</span> count <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">)</span></span>
+<span class="line">    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'开始运行'</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">counts</span><span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>counts <span class="token operator">+</span> count</span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'点击计数:'</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'结束运行'</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>打印结果：</p>
+<ol>
+<li>开始运行</li>
+<li>结束运行</li>
+<li>点击计数: 10</li>
+</ol>
+<p>从上面代码看出最后才执行“点击计数”,其实这是一个假象，主要原因在 React 的生命周期以及绑定的事件流中，所有的 setState 操作会先缓存到一个队列中，在整个事件结束后或者 mount 流程结束后，才会取出之前缓存的 setState 队列进行一次计算，触发 state 更新。那怎么实现同步效果呢？看下一段代码：</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   <span class="token comment">// 数据定义</span></span>
+<span class="line">   state <span class="token operator">=</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token literal-property property">counts</span><span class="token operator">:</span><span class="token number">1</span></span>
+<span class="line">   <span class="token punctuation">}</span><span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">   <span class="token comment">// 事件中的处理</span></span>
+<span class="line">   <span class="token function-variable function">handleClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">      <span class="token keyword">const</span> count <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">)</span></span>
+<span class="line">      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'开始运行'</span><span class="token punctuation">)</span></span>
+<span class="line">      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">        <span class="token literal-property property">counts</span><span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>counts <span class="token operator">+</span> count</span>
+<span class="line">      <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'点击计数:'</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span></span>
+<span class="line">      <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'结束运行'</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>打印结果：</p>
+<ol>
+<li>开始运行</li>
+<li>点击计数: 10</li>
+<li>结束运行</li>
+</ol>
+<h3 id="为什么加了一个settimeout函数就能同步了" tabindex="-1"><a class="header-anchor" href="#为什么加了一个settimeout函数就能同步了"><span>为什么加了一个setTimeout函数就能同步了？</span></a></h3>
+<ol>
+<li>在调用栈中， Component.setState 方法最终会调用 enqueueSetState 方法，而 enqueueSetState 方法内部会调用 scheduleUpdateOnFiber 方法，区别就在于正常调用的时候，scheduleUpdateOnFiber 方法内只会调用 ensureRootIsScheduled ，在事件方法结束后，才会调用 flushSyncCallbackQueue 方法。</li>
+<li>使用setTimeout会脱离 React 事件流的时候，scheduleUpdateOnFiber 在 ensureRootIsScheduled 调用结束后，会直接调用 flushSyncCallbackQueue 方法，这个方法就是用来更新 state 并重新进行 render。</li>
+</ol>
+<h3 id="setstate是宏任务还是微任务呢" tabindex="-1"><a class="header-anchor" href="#setstate是宏任务还是微任务呢"><span>setState是宏任务还是微任务呢？</span></a></h3>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   <span class="token comment">// 数据定义</span></span>
+<span class="line">   state <span class="token operator">=</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token literal-property property">counts</span><span class="token operator">:</span><span class="token number">1</span></span>
+<span class="line">   <span class="token punctuation">}</span><span class="token punctuation">;</span></span>
+<span class="line">   <span class="token comment">// 事件中的处理</span></span>
+<span class="line">   <span class="token function-variable function">handleClick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token keyword">const</span> count <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'宏任务触发'</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">    Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'微任务触发'</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span></span>
+<span class="line">      <span class="token literal-property property">counts</span><span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>counts <span class="token operator">+</span> count</span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'点击计数:'</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span></span>
+<span class="line">    <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>打印结果：</p>
+<ol>
+<li>点击计数: 10</li>
+<li>微任务触发</li>
+<li>宏任务触发</li>
+</ol>
+<p>先完成了 setState 操作，然后再是微任务的触发和宏任务的触发。所以，setState 的执行时机是早于微任务与宏任务的</p>
+</div></template>
+
+

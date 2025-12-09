@@ -1,0 +1,70 @@
+<template><div><h1 id="handlebars" tabindex="-1"><a class="header-anchor" href="#handlebars"><span>handlebars</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<ol>
+<li>Handlebars 提供了必要的功能，使你可以高效地构建语义化模板。</li>
+<li>Handlebars 与 Mustache 模板基本兼容。大多数情况下，您可以在使用 Handlebars 的同时继续使用您当前的模板。</li>
+<li>Handlebars 会将模板编译为 JavaScript 函数。这使得 Handlebars 的执行速度比其他大多数模板引擎都要快。</li>
+</ol>
+</div>
+<h2 id="基本用法" tabindex="-1"><a class="header-anchor" href="#基本用法"><span>基本用法</span></a></h2>
+<p>Handlebars 是一种简单的 模板语言。</p>
+<p>它使用模板和输入对象来生成 HTML 或其他文本格式。Handlebars 模板看起来像常规的文本，但是它带有嵌入式的 Handlebars 表达式 。</p>
+<p>Handlebars 表达式是一些以双花括号 {{}} 括起来的内容。在以下的模版中，firstname 是一个被声明为表达式的变量，且被双花 括号括起来。</p>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>{{firstname}} {{lastname}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p>如果将以下对象输入模板：</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">firstname</span><span class="token operator">:</span> <span class="token string">"Yehuda"</span><span class="token punctuation">,</span></span>
+<span class="line">  <span class="token literal-property property">lastname</span><span class="token operator">:</span> <span class="token string">"Katz"</span><span class="token punctuation">,</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>输出：</p>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Yehuda Katz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><h2 id="路径表达式" tabindex="-1"><a class="header-anchor" href="#路径表达式"><span>路径表达式</span></a></h2>
+<p>Handlebars 表达式亦可为以句点分隔的路径。</p>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line">{{person.firstname}} {{person.lastname}}</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p>这个表达式将会在输入对象中查找 person 属性，然后查找 person 对象中的 firstname 和lastname属性。 person 对象内的 属性。</p>
+<p>传入模版的数据格式</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">person</span><span class="token operator">:</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token literal-property property">firstname</span><span class="token operator">:</span> <span class="token string">"Yehuda"</span><span class="token punctuation">,</span></span>
+<span class="line">    <span class="token literal-property property">lastname</span><span class="token operator">:</span> <span class="token string">"Katz"</span><span class="token punctuation">,</span></span>
+<span class="line">  <span class="token punctuation">}</span><span class="token punctuation">,</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>输出结果：</p>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line">Yehuda Katz</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><h2 id="助手代码" tabindex="-1"><a class="header-anchor" href="#助手代码"><span>助手代码</span></a></h2>
+<p>助手代码可以实现一些并非 Handlesbars 语言本身的功能。</p>
+<p>在运行时可以用 HandleBars.registerHelper 可以注册助手代码。例如为了将字符串中的所有字符转换为大写。</p>
+<ol>
+<li>模版</li>
+</ol>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line">{{firstname}} {{loud lastname}}</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><ol start="2">
+<li>API使用</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">Handlebars<span class="token punctuation">.</span><span class="token function">registerHelper</span><span class="token punctuation">(</span><span class="token string">'loud'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">aString</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token keyword">return</span> aString<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="3">
+<li>数据</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token punctuation">{</span></span>
+<span class="line">  <span class="token literal-property property">firstname</span><span class="token operator">:</span> <span class="token string">"Yehuda"</span><span class="token punctuation">,</span></span>
+<span class="line">  <span class="token literal-property property">lastname</span><span class="token operator">:</span> <span class="token string">"Katz"</span><span class="token punctuation">,</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>结果</p>
+<p>表达式中加&quot;load&quot;的数据就会发生变化，这点有点像vue中的filter过滤器</p>
+<div class="language-html line-numbers-mode" data-highlighter="prismjs" data-ext="html"><pre v-pre><code class="language-html"><span class="line">Yehuda KATZ</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div></div></template>
+
+

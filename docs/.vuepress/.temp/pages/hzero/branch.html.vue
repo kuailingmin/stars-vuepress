@@ -1,0 +1,105 @@
+<template><div><h1 id="分支管理" tabindex="-1"><a class="header-anchor" href="#分支管理"><span>分支管理</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>软件的版本控制以及分支管理贯穿于整个软件产品的生命周期，日常的项目管理对于开发团队能否有节奏且顺利的交付软件也很重要。本分支管理和版本控制规范主要分为3个部分，即分支管理规范、版本号规范、需求与代码关联。其中，将阐述不同的分支管理模型，以及它们的优缺点和使用的场景；描述版本号控制方式——语义化版本；以及将需求与代码管理的必要性等。</p>
+</div>
+<h3 id="分支管理规范" tabindex="-1"><a class="header-anchor" href="#分支管理规范"><span>分支管理规范</span></a></h3>
+<p>目前比较流行的分支管理模型有三个，即GitFlow、GitLabFlow、GitHubFlow。介绍这三种分支模型的原理，使用场景和优缺点等。</p>
+<h3 id="gitflow" tabindex="-1"><a class="header-anchor" href="#gitflow"><span>GitFlow</span></a></h3>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>GitFlow 是最早诞生并得到广泛应用的一种工作流程。
+该模型中存在两种长期分支：master 和 develop。 master中存放对外发布的版本，只有稳定的发布版本才会合并到master中。 develop用于日常开发，存放最新的开发版本。
+也存在三种临时分支：feature, hotfix, release。</p>
+</div>
+<ul>
+<li>feature分支是为了开发某个特定功能，从develop分支中切出，开发完成后合并到develop分支中。</li>
+<li>hotfix分支是修复发布后发现的Bug的分支，从master分支中切出，修补完成后再合并到master和develop分支。</li>
+<li>release分支指发布稳定版本前使用的预发布分支，从develop分支中切出，预发布完成后，合并到develop和master分支中。</li>
+</ul>
+<p>优点：</p>
+<ol>
+<li>feature 分支使开发代码隔离，可以独立的完成开发、构建、测试</li>
+<li>feature 分支开发周期长于release时，可避免未完成的feature进入生产环境</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>无法支持持续发布。</li>
+<li>过于复杂的分支管理，加重了开发者的负担，使开发者不能专注开发。</li>
+</ol>
+<h3 id="githubflow" tabindex="-1"><a class="header-anchor" href="#githubflow"><span>GitHubFlow</span></a></h3>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>GitHubFlow分支模型只存在一个master主分支，日常开发都合并至master，永远保持其为最新的代码且随时可发布</p>
+</div>
+<ul>
+<li>在需要添加或修改代码时， 基于master创建分支，提交修改。</li>
+<li>创建Pull Request，所有人讨论和审查你的代码。</li>
+<li>然后部署到生产环境中进行验证。</li>
+<li>待验证通过后合并到master分支中。</li>
+</ul>
+<p>这个分支模型的优势在于简洁易理解，将master作为核心的分支，代码更新持续集成至master上。根据目前收集到的反应来看，得到了更多的好评，认为GitHubFlow分支模型更加轻便快捷。</p>
+<h3 id="gitlabflow" tabindex="-1"><a class="header-anchor" href="#gitlabflow"><span>GitLabFlow</span></a></h3>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>GitLabFlow 是GitFlow和GitHubFlow的结合, 它吸取了两者的优点，既有适应不同开发环境的弹性，又有单一主分支的简单和便利。
+该模型采取上游优先的原则，即只存在一个master主分支，它是所以分支的上游。只有上游分支采纳的变动才能应用到其他分支</p>
+</div>
+<ul>
+<li>对于持续发布的项目，建议在master之外再建立对应的环境分支，如预生产环境pre-production，生产环境production</li>
+<li>对于版本发布的项目，建议基于master创建稳定版本对应的分支，如stable-1，stable-2</li>
+</ul>
+<h3 id="hzero" tabindex="-1"><a class="header-anchor" href="#hzero"><span>HZERO</span></a></h3>
+<p>HZERO中采取了GitFlow的模式，并提供多种分支类型。</p>
+<table>
+<thead>
+<tr>
+<th>前缀</th>
+<th style="text-align:right">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>master</td>
+<td style="text-align:right">主分支，可用的、稳定的、可直接发布的版本</td>
+</tr>
+<tr>
+<td>feature-**</td>
+<td style="text-align:right">功能开发分支</td>
+</tr>
+<tr>
+<td>bugfix-**</td>
+<td style="text-align:right">未发布bug修复分支</td>
+</tr>
+<tr>
+<td>release-**</td>
+<td style="text-align:right">预发布分支</td>
+</tr>
+<tr>
+<td>hotfix-**</td>
+<td style="text-align:right">已发布bug修复分支</td>
+</tr>
+</tbody>
+</table>
+<h3 id="提交命名规约" tabindex="-1"><a class="header-anchor" href="#提交命名规约"><span>提交命名规约</span></a></h3>
+<p>除了分支的名称需要规范，提交的命名也同样如此。猪齿鱼并没有把这个规则固化到系统中，需要团队共同遵守!
+格式为：[操作类型]操作对象名称，如[ADD]readme，代表增加了readme描述文件。
+常见的操作类型有：</p>
+<ul>
+<li>[IMP] 提升改善正在开发或者已经实现的功能</li>
+<li>[FIX] 修正BUG</li>
+<li>[REF] 重构一个功能，对功能重写</li>
+<li>[ADD] 添加实现新功能</li>
+<li>[REM] 删除不需要的文件</li>
+</ul>
+<h3 id="版本号规范" tabindex="-1"><a class="header-anchor" href="#版本号规范"><span>版本号规范</span></a></h3>
+<p>版本格式：主版本号.次版本号.修订号，版本号递增规则如下：</p>
+<ol>
+<li>主版本号：当你做了不兼容的 API 修改</li>
+<li>次版本号：当你做了向下兼容的功能性新增</li>
+<li>修订号：当你做了向下兼容的问题修正</li>
+</ol>
+<p>先行版本号及版本编译信息可以加到“主版本号.次版本号.修订号”的后面，作为延伸。</p>
+</div></template>
+
+

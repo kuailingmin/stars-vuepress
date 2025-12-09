@@ -1,0 +1,16 @@
+import comp from "/Users/kuailingmin/Desktop/创业/stars-vuepress/docs/.vuepress/.temp/pages/Vue3/Introduce/routerCan.html.vue"
+const data = JSON.parse("{\"path\":\"/Vue3/Introduce/routerCan.html\",\"title\":\"接收路由参数\",\"lang\":\"zh-CN\",\"frontmatter\":{},\"headers\":[{\"level\":2,\"title\":\"路由定义\",\"slug\":\"路由定义\",\"link\":\"#路由定义\",\"children\":[]}],\"git\":{\"updatedTime\":null,\"contributors\":[]},\"filePathRelative\":\"Vue3/Introduce/routerCan.md\",\"excerpt\":\"\\n<div class=\\\"custom-container tip\\\"><p class=\\\"custom-container-title\\\">说明</p>\\n<p>vue3接收路由里面的参数</p>\\n</div>\\n<h2>路由定义</h2>\\n<div class=\\\"language-javascript line-numbers-mode\\\" data-highlighter=\\\"prismjs\\\" data-ext=\\\"js\\\" data-title=\\\"js\\\"><pre><code><span class=\\\"line\\\"><span class=\\\"token keyword\\\">const</span> <span class=\\\"token literal-property property\\\">routes</span><span class=\\\"token operator\\\">:</span> Array<span class=\\\"token operator\\\">&lt;</span>RouteRecordRaw<span class=\\\"token operator\\\">&gt;</span> <span class=\\\"token operator\\\">=</span> <span class=\\\"token punctuation\\\">[</span></span>\\n<span class=\\\"line\\\">    <span class=\\\"token punctuation\\\">{</span></span>\\n<span class=\\\"line\\\">        <span class=\\\"token literal-property property\\\">path</span><span class=\\\"token operator\\\">:</span> <span class=\\\"token string\\\">'/worktime/:id/:name'</span><span class=\\\"token punctuation\\\">,</span></span>\\n<span class=\\\"line\\\">        <span class=\\\"token literal-property property\\\">name</span><span class=\\\"token operator\\\">:</span> <span class=\\\"token string\\\">'Worktime'</span><span class=\\\"token punctuation\\\">,</span></span>\\n<span class=\\\"line\\\">        <span class=\\\"token function-variable function\\\">component</span><span class=\\\"token operator\\\">:</span> <span class=\\\"token punctuation\\\">(</span><span class=\\\"token punctuation\\\">)</span> <span class=\\\"token operator\\\">=&gt;</span> <span class=\\\"token keyword\\\">import</span><span class=\\\"token punctuation\\\">(</span><span class=\\\"token string\\\">'../views/worktime/index.vue'</span><span class=\\\"token punctuation\\\">)</span><span class=\\\"token punctuation\\\">,</span></span>\\n<span class=\\\"line\\\">    <span class=\\\"token punctuation\\\">}</span><span class=\\\"token punctuation\\\">,</span></span>\\n<span class=\\\"line\\\"><span class=\\\"token punctuation\\\">]</span></span>\\n<span class=\\\"line\\\"></span></code></pre>\\n<div class=\\\"line-numbers\\\" aria-hidden=\\\"true\\\" style=\\\"counter-reset:line-number 0\\\"><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div></div></div>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

@@ -1,0 +1,60 @@
+<template><div><h1 id="symbol" tabindex="-1"><a class="header-anchor" href="#symbol"><span>symbol</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">介绍</p>
+<p>symbol是一个ES6标准种新增的一种基本数据类型，在JavaScript中，共有七种基本数据类型：string、number、object、boolean、null、undefined、symbol。并且除了null和undefined之外，每个基本类型都有其包装对象。</p>
+<p>symbol是通过Symbol()函数生成，每一个symbol都是唯一的。现在对象属性名分为了以下两种：一种就是原本的字符串类型，一种就是symbol类型</p>
+</div>
+<p>基本用法:</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  <span class="token keyword">let</span> name <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p>唯一性效果:</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  <span class="token keyword">let</span> name1 <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token keyword">let</span> name2 <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>输出结果：</p>
+<p><img src="@source/images/symbol.png" alt=""></p>
+<p>Symbol 数据类型的另一特点是隐藏性，for···in，object.keys() 不能访问</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  <span class="token keyword">let</span> name <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span></span>
+<span class="line"></span>
+<span class="line">  <span class="token keyword">let</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token operator">:</span><span class="token string">'symbol'</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span>
+<span class="line">  <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">let</span> option <span class="token keyword">in</span> obj<span class="token punctuation">)</span><span class="token punctuation">{</span></span>
+<span class="line">     console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>obj<span class="token punctuation">[</span>option<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">  <span class="token punctuation">}</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>输出结果：</p>
+<p><img src="@source/images/symbol1.png" alt=""></p>
+<p>JavaScript中大多数的数值都支持隐式转换为字符串，但symbol不会转换，可以手动将 symbol 转换成字符串：</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">  <span class="token keyword">let</span> name <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token function">alter</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>  <span class="token comment">// TypeError: Cannot convert a Symbol value to a string</span></span>
+<span class="line"></span>
+<span class="line">  <span class="token function">alert</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>symbol 也不能与其他类型的值进行运算</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'symbol is'</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// TypeError: Cannot convert a Symbol value to a string</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div></div></div><p>Symbol.for()</p>
+<p>如果我们要重复使用一个 symbol 时，可以用到 Symbol.for() 方法。Symbol.for() 方法接受一个字符串参数，会在全局中搜索有没有以该参数命名的 symbol 的值，如果查找到就返回这个值。如果没有查到则重新生成一个值，并将该值以参数名称注册到全局。</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> <span class="token keyword">let</span> klm1 <span class="token operator">=</span> Symbol<span class="token punctuation">.</span><span class="token function">for</span><span class="token punctuation">(</span><span class="token string">'klm'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建</span></span>
+<span class="line"> <span class="token keyword">let</span> klm2 <span class="token operator">=</span> Symbol<span class="token punctuation">.</span><span class="token function">for</span><span class="token punctuation">(</span><span class="token string">'klm'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 查找</span></span>
+<span class="line"> </span>
+<span class="line"> klm1 <span class="token operator">===</span> klm2<span class="token punctuation">;</span> <span class="token comment">// true</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>Symbol.keyFor()</p>
+<p>方法表示获取一个 symbol 的值在全局中注册的命名参数 key，只有使用 Symbol.for() 创建的值才会有注册的命名参数，使用 Symbol() 生成的值则没有：</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">let</span> s4 <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'sq'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">let</span> s5 <span class="token operator">=</span> Symbol<span class="token punctuation">.</span><span class="token function">for</span><span class="token punctuation">(</span><span class="token string">'sq'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">Symbol<span class="token punctuation">.</span><span class="token function">keyFor</span><span class="token punctuation">(</span>s4<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// undefined</span></span>
+<span class="line">Symbol<span class="token punctuation">.</span><span class="token function">keyFor</span><span class="token punctuation">(</span>s5<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// sq</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></div></template>
+
+

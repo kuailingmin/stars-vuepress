@@ -1,0 +1,274 @@
+<!--
+ * @Author: 蒯灵敏
+ * @Date: 2025-06-16 18:09:43
+ * @LastEditors: 蒯灵敏
+ * @LastEditTime: 2025-06-25 09:48:35
+ * @Description: 文件描述
+ * @FilePath: /stars-vuepress/docs/small/header.md
+-->
+# 自动化页面路由
+
+一般在微信小程序配置路由都是通过pages来配置，但是在uniStars框中使用另一种方式配置，这里我们用到uni官方社区提供的一个插件“@uni-helper/vite-plugin-uni-pages”，帮助我们完成这样的工作
+
+#### 安装依赖包
+```sh
+pnpm i @uni-helper/vite-plugin-uni-pages -D
+```
+
+#### vite.config.ts配置
+
+```ts
+import { defineConfig } from "vite";
+import UniPages from '@uni-helper/vite-plugin-uni-pages'
+export default defineConfig({
+    plugins: [
+        UniPages({
+           exclude:['**/components/**/**.*'],
+           routeBlockLang: 'json5', 
+           dts: 'src/types/uni-pages.d.ts' //接受布尔值或与相对项目根目录的路径
+        })
+    ]
+})
+```
+
+#### 页面使用
+
+```vue
+
+<route lang="json5">
+  {
+    style: {
+      navigationBarTitleText: '首页',
+      navigationBarBackgroundColor: '#ddd'
+    },
+  }
+</route>
+  
+<template>
+  <view class="content">
+    <image class="logo" src="/static/logo.png" />
+    <view class="text-area">
+      <text class="title">{{ title }}</text>
+      <uv-button type="primary" text="确定"></uv-button>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+const title = ref('Hello2')
+
+const value = ref<number>(Date.now())
+function handleConfirm({ value }: { value: number }) {
+  console.log(value)
+}
+</script>
+
+```
+
+```json5
+<route lang="json5">
+  {
+    style: {
+      navigationBarTitleText: '首页',
+      navigationBarBackgroundColor: '#ddd'
+    },
+  }
+</route>
+```
+
+插件自定义块语言使用的是json5,还包括json | yaml | yml 
+
+
+#### 方法
+
+1. onBeforeLoadUserConfig
+
+
+* 触发时机：加载用户配置文件（如 pages.config.ts）之前
+* 用途：修改或扩展配置文件的加载行为
+* 参数：无
+* 返回值：void
+
+##### 示例:
+
+```js
+ UniPages({
+  onBeforeLoadUserConfig() {
+    console.log('即将加载用户配置');
+    // 可在此处动态生成配置文件路径
+  }
+})
+```
+
+2. onAfterLoadUserConfig
+* 触发时机：成功加载用户配置文件之后
+* 用途：修改已加载的配置对象
+* 参数：config: UserConfig（已解析的配置对象）
+* 返回值：可返回修改后的 UserConfig 对象（可选）
+
+##### 示例：
+```js
+UniPages({
+  onAfterLoadUserConfig(config) {
+    config.pages.push({ path: '/added-page' }); // 动态添加页面
+    return config; // 返回修改后的配置
+  }
+})
+```
+
+3. onBeforeScanPages
+* 触发时机：扫描页面目录（如 src/pages）之前
+* 用途：修改扫描参数（如目录路径、过滤规则）
+* 参数：options: ScanOptions（扫描配置）
+* 返回值：可返回修改后的 ScanOptions 对象
+
+##### 示例：
+
+```js
+UniPages({
+  onBeforeScanPages(options) {
+    options.dir = 'src/custom-pages'; // 修改扫描目录
+    options.exclude = ['**/test/**']; // 排除测试页面
+    return options;
+  }
+})
+```
+
+4. onAfterScanPages
+* 触发时机：完成页面目录扫描之后
+* 用途：修改扫描到的页面数据
+* 参数：pages: PageConfig[]（扫描结果数组）
+* 返回值：可返回修改后的 PageConfig[]
+
+##### 示例：
+
+```js
+UniPages({
+  onAfterScanPages(pages) {
+    // 动态添加虚拟页面
+    pages.push({
+      path: '/virtual-page',
+      type: 'page',
+      style: { navigationBarTitleText: '虚拟页' }
+    });
+    return pages;
+  }
+})
+```
+
+5. onBeforeMergePageMetaData
+* 触发时机：合并页面元数据（如 .vue 文件中的 route 块）之前
+* 用途：修改待合并的元数据
+* 参数：meta: PageMetaData（待合并的元数据对象）
+* 返回值：可返回修改后的 PageMetaData
+
+##### 示例：
+
+```js
+UniPages({
+  onBeforeMergePageMetaData(meta) {
+    // 为所有页面添加共享元数据
+    meta.style = { ...meta.style, sharedKey: 'value' };
+    return meta;
+  }
+})
+```
+
+
+6. onAfterMergePageMetaData
+* 触发时机：完成元数据合并之后
+* 用途：访问或修改最终生成的页面配置
+* 参数：pages: PageConfig[]（合并后的完整页面配置）
+* 返回值：可返回修改后的 PageConfig[]
+
+##### 示例：
+
+```js
+UniPages({
+  onAfterMergePageMetaData(pages) {
+    // 验证配置或添加全局逻辑
+    pages.forEach(page => {
+      if (!page.style) page.style = {};
+      page.style.background = '#f5f5f5';
+    });
+    return pages;
+  }
+})
+```
+
+7. onBeforeWriteFile
+* 触发时机：将 pages.json 写入磁盘之前
+* 用途：修改文件内容或路径
+* 参数：file: { path: string; content: string }（文件信息）
+* 返回值：可返回修改后的文件对象，或 false 阻止写入
+
+##### 示例：
+
+```js
+UniPages({
+  onBeforeWriteFile(file) {
+    // 修改文件内容
+    if (file.path.endsWith('pages.json')) {
+      const json = JSON.parse(file.content);
+      json.globalStyle = { ...json.globalStyle, newKey: 'value' };
+      file.content = JSON.stringify(json, null, 2);
+    }
+    return file; // 返回修改后的文件对象
+  }
+})
+```
+
+
+8. onAfterWriteFile
+* 触发时机：成功写入文件之后
+* 用途：执行后处理操作（如通知、清理）
+* 参数：file: { path: string; content: string }（已写入的文件信息）
+* 返回值：void
+
+#### 示例:
+
+```js
+UniPages({
+  onAfterWriteFile(file) {
+    console.log(`文件已写入: ${file.path}`);
+    // 触发其他构建流程
+  }
+})
+```
+
+#### 完整示例配置
+```js
+// vite.config.ts
+import { defineConfig } from 'vite';
+import UniPages from '@uni-helper/vite-plugin-uni-pages';
+
+export default defineConfig({
+  plugins: [
+    UniPages({
+      onBeforeLoadUserConfig() {
+        console.log('配置加载开始');
+      },
+      onAfterLoadUserConfig(config) {
+        return { ...config, globalStyle: { title: 'App' } };
+      },
+      onAfterScanPages(pages) {
+        return pages.filter(page => !page.path.includes('hidden'));
+      },
+      onAfterMergePageMetaData(pages) {
+        return pages.map(page => ({
+          ...page,
+          style: { ...page.style, theme: 'dark' }
+        }));
+      },
+      onBeforeWriteFile(file) {
+        if (file.path.includes('pages.json')) {
+          file.content += '\n// Generated by custom hook';
+        }
+        return file;
+      }
+    })
+  ]
+});
+
+```

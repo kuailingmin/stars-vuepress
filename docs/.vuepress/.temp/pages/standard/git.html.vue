@@ -1,0 +1,126 @@
+<template><div><!--
+ * @Author: 蒯灵敏
+ * @Date: 2025-06-12 14:18:56
+ * @LastEditors: 蒯灵敏
+ * @LastEditTime: 2025-06-13 09:36:24
+ * @Description: 文件描述
+ * @FilePath: /stars-vuepress/docs/standard/git.md
+-->
+<h1 id="git规范" tabindex="-1"><a class="header-anchor" href="#git规范"><span>git规范</span></a></h1>
+<h3 id="分支命名规范" tabindex="-1"><a class="header-anchor" href="#分支命名规范"><span>分支命名规范</span></a></h3>
+<ol>
+<li>
+<p>master 主分支
+用于部署生产环境的分支，一般由test分支经过测试完整测试之后合并到主分支</p>
+</li>
+<li>
+<p>test 测试分支
+专门用户测试产品使用的分支,测试完全通过合并到master分支</p>
+</li>
+<li>
+<p>develop 开发分支
+一般开发的新功能时，feature分支都是基于develop分支下创建的，需要始终保持最新完成以及bug修复后的代码，然后提交给test分支进行测试</p>
+</li>
+<li>
+<p>feature 新功能分支（一般简写为feat）
+开发新功能时，以develop为基础创建feature分支。 命名规则:feat/你的名称_模块_功能_时间</p>
+</li>
+<li>
+<p>hotfix 修复分支（一般简写为fix）
+修复上线紧急问题，需要及时修复，这个是以master分支为基础来创建分支，修复完成之后需要合并到develop、test、master分支 命名规则: fix/你的名称_模块_功能_时间</p>
+</li>
+</ol>
+<h3 id="开发规范" tabindex="-1"><a class="header-anchor" href="#开发规范"><span>开发规范</span></a></h3>
+<h4 id="一、拉取代码" tabindex="-1"><a class="header-anchor" href="#一、拉取代码"><span>一、拉取代码</span></a></h4>
+<p>操作流程：</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> # <span class="token number">1.</span> 切换到主分支（master）</span>
+<span class="line">   git checkout master</span>
+<span class="line"></span>
+<span class="line"> # <span class="token number">2.</span> 拉取远程最新代码（推荐 rebase 模式）</span>
+<span class="line">   git pull <span class="token operator">--</span>rebase origin main</span>
+<span class="line"></span>
+<span class="line"> # <span class="token number">3.</span> 若存在本地未提交修改，先暂存：</span>
+<span class="line">   git stash</span>
+<span class="line">   git pull <span class="token operator">--</span>rebase origin main</span>
+<span class="line">   git stash pop  # 还原修改</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="二、创建新功能分支" tabindex="-1"><a class="header-anchor" href="#二、创建新功能分支"><span>二、创建新功能分支</span></a></h4>
+<p>操作目的：隔离开发环境，避免污染主分支
+规范：</p>
+<ul>
+<li>分支命名：feat/你的名称_模块_功能_时间（例：feat/klm-activity-order-20250612）</li>
+<li>分支必须从最新 master 创建</li>
+</ul>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> # <span class="token number">1.</span> 确保主分支最新（参考第一步）</span>
+<span class="line"> # <span class="token number">2.</span> 创建并切换分支</span>
+<span class="line"> git checkout <span class="token operator">-</span>b feat<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="三、开发过程中的操作规范" tabindex="-1"><a class="header-anchor" href="#三、开发过程中的操作规范"><span>三、开发过程中的操作规范</span></a></h4>
+<ol>
+<li>提交代码到本地仓库</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> # 一定要拉取最新代码，方式合并冲突</span>
+<span class="line"> git pull</span>
+<span class="line"></span>
+<span class="line"> # 添加修改（禁止全目录提交）</span>
+<span class="line"> git add src<span class="token operator">/</span>components<span class="token operator">/</span>LoginForm<span class="token punctuation">.</span>vue</span>
+<span class="line"></span>
+<span class="line"> # 信息需清晰</span>
+<span class="line"> git commit <span class="token operator">-</span>m <span class="token string">"feat(login): 实现邮箱登录表单验证"</span></span>
+<span class="line"></span>
+<span class="line"> # 提交</span>
+<span class="line"> git push</span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>提交信息规范：</p>
+<p>前缀：feat(模块): / fix(模块): / docs: / style: / refactor:
+内容：动词开头（添加/修复/优化...）+ 具体描述</p>
+<ol start="2">
+<li>合并主分支更新（长期开发时）</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line">   # <span class="token number">1.</span> 提交本地所有修改（commit 或 stash）</span>
+<span class="line">   # <span class="token number">2.</span> 获取主分支最新代码</span>
+<span class="line">        git fetch origin master</span>
+<span class="line"></span>
+<span class="line">   # <span class="token number">3.</span> 变基到最新 main（推荐）</span>
+<span class="line">        git rebase origin<span class="token operator">/</span>master</span>
+<span class="line"></span>
+<span class="line">   # <span class="token number">4.</span> 解决冲突（若有）</span>
+<span class="line">        git add <span class="token punctuation">[</span>冲突文件<span class="token punctuation">]</span></span>
+<span class="line">        git rebase <span class="token operator">--</span><span class="token keyword">continue</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="三、其他操作" tabindex="-1"><a class="header-anchor" href="#三、其他操作"><span>三、其他操作</span></a></h4>
+<ol>
+<li>删除本地分支</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> git checkout main</span>
+<span class="line"> git branch <span class="token operator">-</span>d feat<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span>  # 普通删除</span>
+<span class="line"> git branch <span class="token operator">-</span><span class="token constant">D</span> feat<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span>  # 强制删除（未合并时）</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="2">
+<li>删除远程分支</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> git push origin <span class="token operator">--</span><span class="token keyword">delete</span> feat<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><ol start="2">
+<li>更新本地分支</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> git checkout main</span>
+<span class="line"> git pull <span class="token operator">--</span>rebase origin main</span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div></div></div><ol start="3">
+<li>紧急修复（Hotfix）规范</li>
+</ol>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"> # 从主分支创建 hotfix 分支</span>
+<span class="line">   git checkout <span class="token operator">-</span>b hotfix<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span> master</span>
+<span class="line"></span>
+<span class="line"> # 修复后合并到 master 和 develop<span class="token punctuation">,</span>test 分支</span>
+<span class="line">   git checkout master</span>
+<span class="line">   git merge <span class="token operator">--</span>no<span class="token operator">-</span>ff hotfix<span class="token operator">/</span>klm<span class="token operator">-</span>activity<span class="token operator">-</span>order<span class="token operator">-</span><span class="token number">20250612</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>操作流程图：</p>
+<p><img src="@source/images/git.png" alt=""></p>
+</div></template>
+
+

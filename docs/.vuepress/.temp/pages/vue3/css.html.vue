@@ -1,0 +1,114 @@
+<template><div><h1 id="style-黑科技" tabindex="-1"><a class="header-anchor" href="#style-黑科技"><span>style (黑科技)</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>在前一阵子VueConf2021大会上，尤雨溪提到一个有趣的东西，那就是在Vue3.x版本加入了一个机制，通过js可以逻辑控制css style的变化。而且尤雨溪重点提到此功能利用浏览器原生的API去做的，性能消耗很小很小，几乎为零！在 SFC Style Variables 提案中介绍到， Vue SFC 样式提供了简单的 CSS 组合和封装，现在大多数现代浏览器都支持原生 CSS 变量，我们可以利用它轻松连接组件的状态和样式。那我们就看看它是如何实现的？</p>
+</div>
+<h1 id="sfc提案" tabindex="-1"><a class="header-anchor" href="#sfc提案"><span>SFC提案</span></a></h1>
+<p>sfc-style-variables 主要概述中指出，此提案支持单文件组件状态驱动的 CSS 变量注入到单文件组件样式中。</p>
+<font color=red face="黑体">旧版提案:</font><div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token operator">&lt;</span>template<span class="token operator">></span></span>
+<span class="line">  <span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span><span class="token string">"text"</span><span class="token operator">></span>hello<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"><span class="token operator">&lt;</span>script<span class="token operator">></span></span>
+<span class="line">    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token keyword">return</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token literal-property property">color</span><span class="token operator">:</span> <span class="token string">'red'</span></span>
+<span class="line">        <span class="token punctuation">}</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"><span class="token operator">&lt;</span>style vars<span class="token operator">=</span><span class="token string">"{ color }"</span><span class="token operator">></span></span>
+<span class="line">    <span class="token punctuation">.</span>text <span class="token punctuation">{</span></span>
+<span class="line">     <span class="token literal-property property">color</span><span class="token operator">:</span> <span class="token keyword">var</span><span class="token punctuation">(</span><span class="token operator">--</span>color<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>style<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>旧版提案设计的弊端：</p>
+<ol>
+<li>需要手动声明 vars 以公开可以使用的变量。</li>
+<li>没有明显的视觉暗示变量被注入和响应。</li>
+<li>scoped/non-scoped 模式下的不同行为。</li>
+<li>在 non-scoped 模式下，CSS 变量会泄漏到子组件中。</li>
+<li>在 scoped 模式下，使用在组件外部声明的普通 CSS 变量需要 global: 前缀。（通常 CSS 变量用法最好在组件内外保持相同）</li>
+</ol>
+<font color=red face="黑体">新版提案:</font><div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token operator">&lt;</span>template<span class="token operator">></span></span>
+<span class="line">  <span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span><span class="token string">"text"</span><span class="token operator">></span>hello<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"><span class="token operator">&lt;</span>script<span class="token operator">></span></span>
+<span class="line">    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token keyword">return</span> <span class="token punctuation">{</span></span>
+<span class="line">          <span class="token literal-property property">color</span><span class="token operator">:</span> <span class="token string">'red'</span></span>
+<span class="line">        <span class="token punctuation">}</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"><span class="token operator">&lt;</span>style<span class="token operator">></span></span>
+<span class="line">    <span class="token punctuation">.</span>text <span class="token punctuation">{</span></span>
+<span class="line">     <span class="token literal-property property">color</span><span class="token operator">:</span> v<span class="token operator">-</span><span class="token function">bind</span><span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token operator">&lt;</span><span class="token operator">/</span>style<span class="token operator">></span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>新版提案的改进</p>
+<ol>
+<li>无需明确声明哪些属性被注入为 CSS 变量（从CSS 中的使用 v-bind() 进行推断）</li>
+<li>反应变量的视觉差别更明显</li>
+<li>scoped/non-scoped 模式下的相同行为</li>
+<li>不会泄漏到子组件中</li>
+<li>普通 CSS 变量的使用不受影响</li>
+</ol>
+<h1 id="核心代码" tabindex="-1"><a class="header-anchor" href="#核心代码"><span>核心代码</span></a></h1>
+<div class="hint-container tip">
+<p class="hint-container-title">说明</p>
+<p>查阅资料之后简述一下这个流程，首先vue-loader 会解析 .vue 文件，并提取语言块，如有必要会通过其它 loader 处理，
+最后将他们组装成一个 ES Module，它的默认导出是一个 Vue.js 组件选项的对象如果在‘style’ 中通过 lang 属性，
+使用其他 CSS 预处理语言（less、sass）等，则会匹配构建工具（webpack、vite）所配置的 loader 进行特定处理。
+Vue3 SFC Style 中的部分编译主要是由 postcss 完成的 Vue 源码中对应着 packages/compiler-sfc/sfc/compileStyle.ts 中的 doCompileStyle() 方法</p>
+</div>
+<p>代码</p>
+<div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">doCompileStyle</span><span class="token punctuation">(</span></span>
+<span class="line">  <span class="token parameter"><span class="token literal-property property">options</span><span class="token operator">:</span> SFCAsyncStyleCompileOptions</span></span>
+<span class="line"><span class="token punctuation">)</span><span class="token operator">:</span> SFCStyleCompileResults <span class="token operator">|</span> Promise<span class="token operator">&lt;</span>SFCStyleCompileResults<span class="token operator">></span> <span class="token punctuation">{</span></span>
+<span class="line">  <span class="token keyword">const</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token operator">...</span></span>
+<span class="line">    id<span class="token punctuation">,</span></span>
+<span class="line">    <span class="token operator">...</span></span>
+<span class="line">  <span class="token punctuation">}</span> <span class="token operator">=</span> options</span>
+<span class="line">  <span class="token operator">...</span></span>
+<span class="line">  <span class="token keyword">const</span> plugins <span class="token operator">=</span> <span class="token punctuation">(</span>postcssPlugins <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span>
+<span class="line highlighted">  plugins<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span><span class="token function">cssVarsPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token literal-property property">id</span><span class="token operator">:</span> shortId<span class="token punctuation">,</span> isProd <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span>
+<span class="line">  <span class="token operator">...</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>在使用 postcss 编译'style' 之前会加入 cssVarsPlugin 插件</p>
+<font color=red face="黑体">cssVarsPlugin:</font><div class="language-javascript line-numbers-mode" data-highlighter="prismjs" data-ext="js"><pre v-pre><code class="language-javascript"><span class="line"><span class="token keyword">const</span> cssVarRE <span class="token operator">=</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span></span>
+<span class="line"><span class="token keyword">const</span> <span class="token literal-property property">cssVarsPlugin</span><span class="token operator">:</span> PluginCreator<span class="token operator">&lt;</span>CssVarsPluginOptions<span class="token operator">></span> <span class="token operator">=</span> <span class="token parameter">opts</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">   <span class="token keyword">const</span> <span class="token punctuation">{</span> id<span class="token punctuation">,</span> isProd <span class="token punctuation">}</span> <span class="token operator">=</span> opts<span class="token operator">!</span></span>
+<span class="line">   <span class="token keyword">return</span> <span class="token punctuation">{</span></span>
+<span class="line">       <span class="token literal-property property">postcssPlugin</span><span class="token operator">:</span> <span class="token string">'vue-sfc-vars'</span><span class="token punctuation">,</span></span>
+<span class="line">       <span class="token function">Declaration</span><span class="token punctuation">(</span><span class="token parameter">decl</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">           <span class="token comment">// rewrite CSS variables</span></span>
+<span class="line">           <span class="token keyword">if</span> <span class="token punctuation">(</span>cssVarRE<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>decl<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">               decl<span class="token punctuation">.</span>value <span class="token operator">=</span> decl<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span>cssVarRE<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">_<span class="token punctuation">,</span> $1<span class="token punctuation">,</span> $2<span class="token punctuation">,</span> $3</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span>
+<span class="line">               <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">var(--</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token function">genVarName</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> $1 <span class="token operator">||</span> $2 <span class="token operator">||</span> $3<span class="token punctuation">,</span> isProd<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)</span><span class="token template-punctuation string">`</span></span></span>
+<span class="line">               <span class="token punctuation">}</span><span class="token punctuation">)</span></span>
+<span class="line">           <span class="token punctuation">}</span></span>
+<span class="line">       <span class="token punctuation">}</span></span>
+<span class="line">   <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h1 id="css-变量注入的优势" tabindex="-1"><a class="header-anchor" href="#css-变量注入的优势"><span>CSS 变量注入的优势</span></a></h1>
+<ol>
+<li>主题 - 通过响应式的全局样式，进行主题变更。（参考 Naive UI）。</li>
+<li>同其他 CSS 预处理语言（Less、Sass 等）相比，免于安装，不用配置 loader。</li>
+<li>结合响应式特性，可以很好的模块化，不用导出 CSS 样式文件。</li>
+</ol>
+</div></template>
+
+

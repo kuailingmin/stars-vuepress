@@ -1,0 +1,62 @@
+<template><div><h1 id="工程目录" tabindex="-1"><a class="header-anchor" href="#工程目录"><span>工程目录</span></a></h1>
+<div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text" data-title="text"><pre v-pre><code><span class="line"></span>
+<span class="line">vue3.0</span>
+<span class="line">|</span>
+<span class="line">└───src</span>
+<span class="line">    |</span>
+<span class="line">    └───api </span>
+<span class="line">    │</span>
+<span class="line">    └───assets</span>
+<span class="line">    │</span>
+<span class="line">    └───common</span>
+<span class="line">    |   │</span>
+<span class="line">    |   └───index.ts  // 公共变量、事件管理</span>
+<span class="line">    │</span>
+<span class="line">    └───components  // 公共组件库</span>
+<span class="line">    │</span>
+<span class="line">    └───interface  // ts全局接口管理</span>
+<span class="line">    │</span>
+<span class="line">    └───layout  // 布局</span>
+<span class="line">    │</span>
+<span class="line">    └───plugin // 公共插件，包含 ui库的 引用封装 </span>
+<span class="line">    │</span>
+<span class="line">    └───locales // 语言国际化配置</span>
+<span class="line">    |   │</span>
+<span class="line">    |   └───en.ts  // 英文（美式）</span>
+<span class="line">    |   │</span>
+<span class="line">    |   └───zh-CN.ts  // 中文    </span>
+<span class="line">    │</span>
+<span class="line">    └───store //状态管理  </span>
+<span class="line">    |   │</span>
+<span class="line">    |   └───modules  // 根据业务封装modules</span>
+<span class="line">    |   |</span>
+<span class="line">    |   └───index.ts  // 状态入口  </span>
+<span class="line">    │</span>
+<span class="line">    └───styles // 公共css样式</span>
+<span class="line">    |   |</span>
+<span class="line">    |   └───com.scss  // 基础css样式 </span>
+<span class="line">    |   |</span>
+<span class="line">    |   └───index.scss  // 样式总入口  </span>
+<span class="line">    |   |</span>
+<span class="line">    |   └───mixin.scss  // 公共继承样式</span>
+<span class="line">    |   |</span>
+<span class="line">    |   └───them.scss  // 项目主题样式</span>
+<span class="line">    │</span>
+<span class="line">    └───utils // 公共工具封装</span>
+<span class="line">    │</span>
+<span class="line">    └───views // 业务页面集合</span>
+<span class="line">    │</span>
+<span class="line">    └───viewsCom // 公共页面集合</span>
+<span class="line">    │</span>
+<span class="line">    └───App.vue // 项目视图总入口</span>
+<span class="line">    │</span>
+<span class="line">    └───main.ts // 项目总入口  </span>
+<span class="line">    │</span>
+<span class="line">    └───shims-vue.d.ts // 声明vue对象让ts识别</span>
+<span class="line">|</span>
+<span class="line">└───.env.development </span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></div></template>
+
+

@@ -1,0 +1,43 @@
+<template><div><h1 id="java内存" tabindex="-1"><a class="header-anchor" href="#java内存"><span>Java内存</span></a></h1>
+<h3>Java内存模型与原子性、可见性、有序性</h3>
+<p><img src="@source/images/memory1.png" alt="JMM"></p>
+<h3 id="一、java内存模型" tabindex="-1"><a class="header-anchor" href="#一、java内存模型"><span>一、Java内存模型</span></a></h3>
+<p><em>Java Memory Modle</em>，简称 <em>JMM</em>，中文名称 <strong>Java内存模型</strong>，它是一个抽象的概念，用来描述或者规范访问内存变量的方式。因为各中计算机的操作系统和硬件不同，方式机制也可能不同，Java内存模型用于屏蔽（适配）各种差异，以此来达到访问各个平台的一致的效果。这也是Java夸平台的重要原因之一。</p>
+<p><strong>主内存：</strong> Java内存规定了所有变量都存储在主内存（Main Memory）中，各个线程又有自己的本地内存（工作内存），本地内存保存着主内存中部分变量。具体访问方式如下：</p>
+<p><img src="@source/images/memory2.png" alt="JMM工作方式"></p>
+<p>**1、lock加锁：**为了保证访问主内存变量的线程安全性，在访问前一般会加锁处理；</p>
+<p>**2、read读：**从主内存中读取一个变量到工作内存；</p>
+<p>**3、load加载：**把read读到的变量加载到工作内存的变量副本中；</p>
+<p>**4、use使用：**此时线程可以使用其工作内存中的变量了；</p>
+<p>**5、assign赋值：**将处理后的变量赋值给工作内存中的变量；</p>
+<p>**6、store存储：**将工作内存中的变量存储到主内存中，以新建new 一个新变量的方式存储；</p>
+<p>**7、write写：**将store存在的新变量的引用赋值给被处理的变量；</p>
+<p>**8、unload解锁：**所有的工作做完，最后解锁释放资源。</p>
+<hr>
+<h3 id="二、java内存模型的三大特性" tabindex="-1"><a class="header-anchor" href="#二、java内存模型的三大特性"><span>二、Java内存模型的三大特性</span></a></h3>
+<h4 id="_1、原子性-atomicity" tabindex="-1"><a class="header-anchor" href="#_1、原子性-atomicity"><span>1、原子性（Atomicity）</span></a></h4>
+<p>这里的原子性如同数据库事务中是原子性，一个或多个操作要么全执行成功要么全执行失败（全不执行）。</p>
+<div class="language-java line-numbers-mode" data-highlighter="prismjs" data-ext="java"><pre v-pre><code class="language-java"><span class="line"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span></span>
+<span class="line">a<span class="token operator">++</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">double</span> b <span class="token operator">=</span> <span class="token number">1.5</span><span class="token punctuation">;</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>Java内存模型只保证单一的操作具有原子性，比如上面的 <code v-pre>int a = 1;</code> 是一个单子的操作，所以具有原子性。而 <code v-pre>a++</code> 操作在底层会分为三个操作：1）、读取a的值给临时变量；2）、临时变量a的值加1操作；3）、将加操作后的值赋值给a。每个操作都是原子的，但Java内存模型在多线程下并不能保证多操作具有整体原子性，因为它也不知道这个整体内有多少操作，用户想要达到多操作具有整体原子性，需要对响应的代码块做同步（synchronous）处理，比如使用 有锁的<code v-pre>synchronized</code> 或 无锁的<code v-pre>CAS</code>。</p>
+<h4 id="_2、可见性-visibility" tabindex="-1"><a class="header-anchor" href="#_2、可见性-visibility"><span>2、可见性（Visibility）</span></a></h4>
+<p>这里的可见性是内存可见性。</p>
+<p><img src="@source/images/memory3.png" alt="多线程共访变量"></p>
+<p>如上图，线程1和线程2在未同步的情况下对共享内存（主内存）中的变量进行访问，比如两个线程的操作都是对变量a进行加1操作。假设线程1首先获取主内存中变量a的值，随后线程2又获取了主内存变量a的值，此时它们工作内存中a的值都是1，它们各自将a的值加1操作，然后assign至工作内存，工作内存中变量a的值都是2，然后两个线程又将值刷新到主内存，最后的结果是主内存中变量a的值是2。虽然整体对a的值加1操作做了两次操作，但由于线程间的操作是互相隔离的，默认情况下无法感知内存变量的值在随后的变化，也就无法访问内存中最新的变量值，这就是内存可行性的问题。</p>
+<p>如何解决内存可见性的问题？</p>
+<p>1）、对进入临界区的线程做同步处理（比如 synchronized）,同一时刻仅有一个线程能够访问临界区的资源；</p>
+<p>2）、使用 volatile 关键字保证内存可见性，它能保证访问临界区资源的所有线程总能看到共享资源的最新值；</p>
+<p>3）、CAS无锁化。</p>
+<h4 id="_3、有序性-ordering" tabindex="-1"><a class="header-anchor" href="#_3、有序性-ordering"><span>3、有序性（Ordering）</span></a></h4>
+<p>线程内的所有操作都是有序的，既程序执行的顺序按照代码的先后顺序执行。比如下面的示例：</p>
+<div class="language-java line-numbers-mode" data-highlighter="prismjs" data-ext="java"><pre v-pre><code class="language-java"><span class="line"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span></span>
+<span class="line"><span class="token keyword">int</span> c <span class="token operator">=</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>线程内程序会先执行 <code v-pre>int a = 1;</code> ，然后执行 <code v-pre>int b = 2;</code>  最后执行<code v-pre>int c = a + b;</code>。</p>
+<p>关于 <strong>指令重排序</strong> 和 <strong>顺序一致性模型</strong> 参见后面的章节。</p>
+</div></template>
+
+
